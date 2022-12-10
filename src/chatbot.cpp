@@ -45,6 +45,103 @@ ChatBot::~ChatBot()
 //// STUDENT CODE
 ////
 
+// Copy constructor
+ChatBot::ChatBot(const ChatBot &source)
+{
+    std::cout << "ChatBot Copy Constructor" << std::endl;
+    
+    // assign data handles
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+    _chatLogic->SetChatbotHandle(this);
+    // use copy constructor of the wxWidgets. 
+    // It uses reference counting
+    _image = new wxBitmap(*source._image);
+}
+
+// Move contructor           
+ChatBot::ChatBot(ChatBot &&source)
+{
+    std::cout << "ChatBot Move Constructor" << std::endl;
+    
+    // assign data handles
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+    _chatLogic->SetChatbotHandle(this);
+
+    // move pointer
+    _image = source._image;
+
+    source._chatLogic = nullptr;
+    source._rootNode  = nullptr;
+    source._image = NULL;
+}
+
+// Copy assigment operator             
+ChatBot &ChatBot :: operator=(const ChatBot &source)
+{
+    std::cout << "ChatBot Assignment Operator" << std::endl;
+    
+    // CHeck if it's self assignment
+    if (this == &source)
+    {
+        return *this;
+    }
+
+    // assign data handles
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+    _chatLogic->SetChatbotHandle(this);
+
+    // We need to call wxWidgets destructor to 
+    // decrement reference counter
+    if(_image != NULL) 
+    {
+        delete _image;
+        _image = NULL;
+    }
+        
+    // use copy constructor of the wxWidgets. 
+    // It uses reference counting
+    _image = new wxBitmap(*source._image);
+
+    return *this;
+}
+
+// Move assigment operator  
+ChatBot &ChatBot :: operator=(ChatBot &&source)
+{
+    std::cout << "ChatBot Move Assignment Operator" << std::endl;
+    
+    // CHeck if it's self assignment
+    if (this == &source)
+    {
+        return *this;
+    }
+
+    // assign data handles
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+    _chatLogic->SetChatbotHandle(this);
+
+    // We need to call wxWidgets destructor to 
+    // decrement reference counter
+    if(_image != NULL) 
+    {
+        delete _image;
+        _image = NULL;
+    }
+        
+    // move pointer
+    _image = source._image;
+
+    source._image = NULL;
+    source._chatLogic = nullptr;
+    source._rootNode  = nullptr;
+    
+    return *this;
+}      
+
 ////
 //// EOF STUDENT CODE
 
